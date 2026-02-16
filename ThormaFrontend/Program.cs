@@ -14,7 +14,12 @@ namespace ThormaFrontend
             builder.Services.AddHttpClient("ThormaApi", c =>
             {
                 c.BaseAddress = new Uri(builder.Configuration["Api:BaseUrl"]!);
+            })
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                UseProxy = false
             });
+                
 
             builder.Services.AddScoped<FestokApi>();
             builder.Services.AddScoped<KepekApi>();

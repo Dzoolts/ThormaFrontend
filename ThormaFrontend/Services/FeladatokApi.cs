@@ -23,11 +23,8 @@ namespace ThormaFrontend.Services
         // 3anyag – olaj technikával készült képek anyagai (distinct)
 
         public async Task<List<string>> Get3AnyagAsync(CancellationToken ct = default)
-
         => await _f.CreateClient("ThormaApi")
-
         .GetFromJsonAsync<List<string>>("api/Feladatok/3anyag", ct)
-
         ?? new();
 
 

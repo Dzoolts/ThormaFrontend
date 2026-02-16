@@ -17,7 +17,7 @@ namespace ThormaFrontend.Pages.Feladatok
         public List<string> Anyagok { get; private set; } = new();
 
 
-
+        public _3anyagModel(FeladatokApi api) => _api = api;
 
         public async Task OnGetAsync()
 
