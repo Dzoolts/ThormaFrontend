@@ -18,20 +18,7 @@
                 <a class="navbar-brand" asp-area="" asp-page="/Index">ThormaFrontend</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="nav-link text-success">
-                        @AuthSession.GetEmail()
-                        @if (AuthSession.IsInRole("Admin"))
-                        {
-                            <span class="badge bg-danger ms-2">Admin</span>
-                        }
-
-                        59
-
-                        else if (AuthSession.IsInRole("User"))
-                        {
-                        <span class="badge bg-warning ms-2">User</span>
-                        }
-                    </span>
+                    
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
@@ -62,7 +49,17 @@
                         else
                         {
                             <li class="nav-item">
-                                <span class="nav-link text-success">@AuthSession.GetEmail()</span>
+                                <span class="nav-link text-success">
+                                    @AuthSession.GetEmail()
+                                    @if (AuthSession.IsInRole("Admin"))
+                                    {
+                                        <span class="badge bg-danger ms-2">Admin</span>
+                                    }
+                                    else if (AuthSession.IsInRole("User"))
+                                    {
+                                    <span class="badge bg-warning ms-2">User</span>
+                                    }
+                                </span>
                             </li>
                             <li class="nav-item">
                                 <form method="post" asp-page="/Account/Logout" class="d-inline">
