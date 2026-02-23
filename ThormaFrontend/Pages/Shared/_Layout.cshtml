@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using ThormaFrontend.Services
+@inject AuthSession AuthSession
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -15,25 +18,58 @@
                 <a class="navbar-brand" asp-area="" asp-page="/Index">ThormaFrontend</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="nav-link text-success">
+                        @AuthSession.GetEmail()
+                        @if (AuthSession.IsInRole("Admin"))
+                        {
+                            <span class="badge bg-danger ms-2">Admin</span>
+                        }
+
+                        59
+
+                        else if (AuthSession.IsInRole("User"))
+                        {
+                        <span class="badge bg-warning ms-2">User</span>
+                        }
+                    </span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-
-                            <a class="nav-link text-dark" asp-page="/Festok/Index">Festők</a>
-
-                        </li>
-
-                        <li class="nav-item">
-
-                            <a class="nav-link text-dark" asp-page="/Kepek/Index">Képek</a>
-
-                        </li>
+                        @if (AuthSession.IsSignedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Festok/Index">Festők</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Kepek/Index">Képek</a>
+                            </li>
+                        }
 
                         <li class="nav-item">
                         <a class="nav-link text-dark" asp-page="/Feladatok/Index">Feladatok</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        @if (!AuthSession.IsSignedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Account/Login">Bejelentkezés</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-page="/Account/Register">Regisztráció</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <span class="nav-link text-success">@AuthSession.GetEmail()</span>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post" asp-page="/Account/Logout" class="d-inline">
+                                    <button type="submit" class="btn btn-link nav-link text-danger">Kijelentkezés</button>
+                                </form>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

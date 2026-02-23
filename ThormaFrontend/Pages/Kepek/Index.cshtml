@@ -1,16 +1,18 @@
 ﻿@page
-
+@using ThormaFrontend.Services
+@inject AuthSession AuthSession
 @model ThormaFrontend.Pages.Kepek.IndexModel
 
 
 <h1>Képek</h1>
 
 
-<p>
-
-    <a asp-page="./Create">Új kép</a>
-
-</p>
+@if (AuthSession.IsInRole("Admin"))
+{
+    <p>
+        <a asp-page="./Create">Új kép</a>
+    </p>
+}
 
 
 <table class="table">
@@ -59,9 +61,17 @@
 
                 <td>
 
-                    <a asp-page="./Edit" asp-route-leltar="@k.Leltar">Szerkeszt</a> |
-
-                    <a asp-page="./Delete" asp-route-leltar="@k.Leltar">Töröl</a>
+                    @if (AuthSession.IsInRole("User") || AuthSession.IsInRole("Admin"))
+                    {
+                        <a asp-page="./Details" asp-route-leltar="@k.Leltar">Details</a>
+                    }
+                    @if (AuthSession.IsInRole("Admin"))
+                    {
+                        <span> | </span>
+                        <a asp-page="./Edit" asp-route-leltar="@k.Leltar">Edit</a>
+                        <span> | </span>
+                        <a asp-page="./Delete" asp-route-leltar="@k.Leltar">Delete</a>
+                    }
 
                 </td>
 

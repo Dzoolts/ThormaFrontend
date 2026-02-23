@@ -1,3 +1,4 @@
+using ThormaFrontend.Infrastructure;
 using ThormaFrontend.Services;
 
 namespace ThormaFrontend
@@ -15,15 +16,36 @@ namespace ThormaFrontend
             {
                 c.BaseAddress = new Uri(builder.Configuration["Api:BaseUrl"]!);
             })
-            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-            {
-                UseProxy = false
-            });
-                
+             .ConfigurePrimaryHttpMessageHandler(() =>
+                new HttpClientHandler { UseProxy = false }
+             )
+             .AddHttpMessageHandler<JwtBearerHandler>();
+
 
             builder.Services.AddScoped<FestokApi>();
             builder.Services.AddScoped<KepekApi>();
             builder.Services.AddScoped<FeladatokApi>();
+
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(2);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddScoped<AuthPageFilter>();
+            // Add services to the container.
+            builder.Services.AddRazorPages()
+            .AddMvcOptions(options =>
+            {
+                options.Filters.AddService<AuthPageFilter>();
+            });
+
+            builder.Services.AddScoped<AuthSession>();
+            builder.Services.AddScoped<AuthApi>();
+            builder.Services.AddTransient<JwtBearerHandler>();
 
             var app = builder.Build();
 
@@ -41,7 +63,7 @@ namespace ThormaFrontend
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.MapRazorPages();
 
             app.Run();
